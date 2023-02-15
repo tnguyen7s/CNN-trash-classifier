@@ -23,7 +23,7 @@ Notes:
 	Taco_annotations_train: 3827 trash instances and skipped 7678 instances
 
 ### DrinkingWaste dataset
-1. cropped images in Yolo_imgs folder using Yolo annotation defined in the corresponding .txt file
+1. crop images in Yolo_imgs folder using Yolo annotation defined in the corresponding .txt file
 2. all images goes to ./datasets/DrinkingWaste/[category_name]
 3. all labels goes to ./datasets/DrinkingWaste/labels.csv
 
