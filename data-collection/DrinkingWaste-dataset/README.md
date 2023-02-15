@@ -1,0 +1,1 @@
+Downloaded DrinkingWaste-dataset (`Archived` folder) is placed here.
