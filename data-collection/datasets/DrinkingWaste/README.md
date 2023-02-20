@@ -1,1 +1,0 @@
-Cropped DrinkingWaste-dataset images and labels.csv is placed here.

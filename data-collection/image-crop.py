@@ -41,19 +41,22 @@ def crop(src_img_folder, src_img_name, dest_img_folder, category_name, annotatio
     Parameters
     ----------
     # params to access image
-    src_img_folder: folder contains the source image (e.g. Taco_dataset)
+    src_img_folder: folder contains the source image (e.g. ./Extended_Taco_dataset)
     
     src_img_name: the image name (e.g. batch1/0001.jpg)
+
+    => img resides in ./Extended_Taco_dataset/batch1/0001.jpg
     
     
     # params to create destination image path
     
-    dest_img_folder: folder for the dest image (e.g. datasets/Taco)
+    dest_img_folder: folder for the dest image (e.g. collected-datasets/Extended-Taco)
     
     category_name: the category of the trash instance; one of the seven categories (e.g. bio)
     
     annotation_id: the id of annotation (usage: subset_num+"_"+annotat_id; e.g.1_1)
     
+    => cropped img resides in collected-datasets/Extended-Taco/bio/1_1.jpg
     
     # params to crop images
     
@@ -73,16 +76,25 @@ def crop(src_img_folder, src_img_name, dest_img_folder, category_name, annotatio
     # read image to crop
     src_img_path = os.path.join(src_img_folder, src_img_name)
     img = cv2.imread(src_img_path)
+    
+    # if image does not exist
+    if (img is None):
+        print('return -1')
+        return -1
+
+    # get image width and height
     img_dims = img.shape
     image_h, image_w = img_dims[0], img_dims[1]
 
     # prepare to crop
     x, y, width, height = bbox
     
+    # convert from yolo to coco
     if (yolo):
         x, y, width, height = yolo_to_coco(x, y, width, height, image_w, image_h)
     
 
+    # if we want square image
     if square:
         if width > height:
             y = y - (width-height)/2
@@ -92,11 +104,21 @@ def crop(src_img_folder, src_img_name, dest_img_folder, category_name, annotatio
             width = height
     width *= zoom
     height *= zoom
-    
+
+    # prepare slicing index
+    x1 = int(abs(x))
+    x2 = int(abs(x) + abs(width))
+    y1 = int(abs(y))
+    y2 = int(abs(y) + abs(height))
+
+    if (x2>image_w):
+        x2 = image_w-1
+    if (y2>image_h):
+        y2 = image_h-1
+
     # crop
-    try:
-        cropped_img = img[int(abs(y)): int(abs(y) + abs(height)),
-                       int(abs(x)): int(abs(x) + abs(width))]
+    try:            
+        cropped_img = img[y1:y2,x1:x2]
         
         # save
         dest_img_path = os.path.join(dest_img_folder, category_name)
@@ -105,10 +127,14 @@ def crop(src_img_folder, src_img_name, dest_img_folder, category_name, annotatio
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             cv2.imwrite(os.path.join(dest_img_folder, category_name, str(annotation_id)+".jpg"), cropped_img)
-    except Exception:
-        print("Error when cropping ", src_img_name)
+    except Exception as e:
+        print("Error when cropping ", src_img_name, bbox)
+        print("image shape: ", img.shape)
+        print(str(y1)+":"+str(y2)+" "+str(x1)+":"+ str(x2))
+        print(cropped_img)
+        return -1
     
-    
+    return 0
 
 def crop_and_label_Taco(subset_num, annotation_filepath, src_img_folder, dest_img_folder, labels_filepath, zoom, square):
     """
@@ -119,13 +145,13 @@ def crop_and_label_Taco(subset_num, annotation_filepath, src_img_folder, dest_im
     ----------
     subset_num : the sub dataset number (since data collected from multiple sources, each sub dataset can be assigned with a number)
     
-    annotation_filepath : the file path to the annotations file of the Taco dataset (e.g. ./annotations/Taco_annotations_test.json)
+    annotation_filepath : the file path to the annotations file of the Taco dataset (e.g. ./annotations/Extended_Taco_annotations_test.json)
     
-    src_img_folder : the parent folder of the images (e.g. ./Taco_dataset)
+    src_img_folder : the parent folder of the images (e.g. ./Extended_Taco_dataset)
     
-    dest_img_folder : the parent folder of the cropped images sub folders (e.g. ./datasets/Taco)
+    dest_img_folder : the parent folder of the cropped images sub folders (e.g. ./collected-datasets/Extended-Taco)
         
-    labels_filepath : the file path to the csv file containing labels (e.g. ./datasets/Taco/labels.csv)
+    labels_filepath : the file path to the csv file containing labels (e.g. ./collected-datasets/Extended-Taco/labels.csv)
         
     zoom: zoom out or in bounding box
  
@@ -163,17 +189,11 @@ def crop_and_label_Taco(subset_num, annotation_filepath, src_img_folder, dest_im
         image_filename = image_filenames[image_id]
         category_name = CATEGORIES[category_id]
         
-        if ('dumped' in image_filename.split('/')):
-            skipped_num+=1
-            continue
             
         
-        # add label record
-        labels_data['image_path'].append('/'.join([dest_img_folder, category_name, str(annotat_id)+".jpg"]))
-        labels_data['category_id'].append(category_id)
         
         # crop image
-        crop(src_img_folder, 
+        if (crop(src_img_folder, 
              image_filename, 
              dest_img_folder, 
              category_name, 
@@ -181,9 +201,16 @@ def crop_and_label_Taco(subset_num, annotation_filepath, src_img_folder, dest_im
              bbox, 
              zoom, 
              square
-        )
+            ) == 0):
+            # add label record
+            labels_data['image_path'].append('/'.join([dest_img_folder, category_name, str(annotat_id)+".jpg"]))
+            labels_data['category_id'].append(category_id)
+            
         
-        i+=1    
+            i+=1    
+        else:
+            skipped_num += 1
+
         # printing
         if (i%100==0):
             print("Cropped: "+str(i)+" trash instances")
@@ -208,9 +235,9 @@ def crop_and_label_DrinkingWaste(subset_num, src_img_folder, dest_img_folder, la
     src_img_folder : the parent folder of the drinkingWaste dataset (e.g. DrinkingWaste dataset). subfolder is the same as the DrinkingWaste archive downloaded from Kaggle
     ---- subfolder to use: images_of_waste/Yolo_imgs
     
-    dest_img_folder : the parent folder of the cropped images sub folders (e.g. ./datasets/DrinkingWaste)
+    dest_img_folder : the parent folder of the cropped images sub folders (e.g. ./collected-datasets/DrinkingWaste)
     
-    labels_filepath : the file path to the csv file containing labels (e.g. ./datasets/DrinkingWaste/labels.csv)
+    labels_filepath : the file path to the csv file containing labels (e.g. ./collected-datasets/DrinkingWaste/labels.csv)
     
     zoom: zoom out or in bounding box
  
@@ -275,31 +302,30 @@ def crop_and_label_DrinkingWaste(subset_num, src_img_folder, dest_img_folder, la
 
     
 if __name__== '__main__':
-    # annotation_filepath = './annotations/Taco_annotations_test.json'
-    # src_img_folder = './Taco-dataset'
-    # dest_img_folder = './datasets/Taco'
-    # labels_filepath = './datasets/Taco/labels.csv'
+    # annotation_filepath = './annotations/Extended_Taco_annotations_test.json'
+    # src_img_folder = './Extended-Taco-dataset'
+    # dest_img_folder = './collected-datasets/Extended-Taco'
+    # labels_filepath = './collected-datasets/Extended-Taco/labels.csv'
     # zoom = 1
     # square = True
     
     # crop_and_label_Taco(1, annotation_filepath, src_img_folder, dest_img_folder, labels_filepath, zoom, square)
 
 
-    # annotation_filepath = './annotations/Taco_annotations_train.json'
-    # src_img_folder = './Taco-dataset'
-    # dest_img_folder = './datasets/Taco'
-    # labels_filepath = './datasets/Taco/labels.csv'
-    # zoom = 1
-    # square = True
- 
-    # crop_and_label_Taco(2, annotation_filepath, src_img_folder, dest_img_folder, labels_filepath, zoom, square)
-    
-    
-    subset_num = 3
-    src_img_folder = './DrinkingWaste-dataset'
-    dest_img_folder = './datasets/DrinkingWaste'
-    labels_filepath = './datasets/DrinkingWaste/labels.csv'
+    annotation_filepath = './annotations/Extended_Taco_annotations_train.json'
+    src_img_folder = './Extended-Taco-dataset'
+    dest_img_folder = './collected-datasets/Extended-Taco'
+    labels_filepath = './collected-datasets/Extended-Taco/labels.csv'
     zoom = 1
     square = True
-    crop_and_label_DrinkingWaste(subset_num, src_img_folder, dest_img_folder, labels_filepath, zoom, square)
+ 
+    crop_and_label_Taco(2, annotation_filepath, src_img_folder, dest_img_folder, labels_filepath, zoom, square)
     
+    
+    # subset_num = 3
+    # src_img_folder = './DrinkingWaste-dataset'
+    # dest_img_folder = './collected-datasets/DrinkingWaste'
+    # labels_filepath = './collected-datasets/DrinkingWaste/labels.csv'
+    # zoom = 1
+    # square = True
+    # crop_and_label_DrinkingWaste(subset_num, src_img_folder, dest_img_folder, labels_filepath, zoom, square)

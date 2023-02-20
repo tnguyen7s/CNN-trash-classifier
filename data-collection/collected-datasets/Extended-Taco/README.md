@@ -1,0 +1,1 @@
+Cropped Extended-Taco-dataset images and labels.csv are placed here.

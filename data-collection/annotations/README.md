@@ -1,1 +1,1 @@
-These datasets of annotations for the TACO dataset are prepared by detect-waste (https://github.com/wimlds-trojmiasto/detect-waste)
+These datasets of annotations for the Extended TACO dataset are prepared by detect-waste (https://github.com/wimlds-trojmiasto/detect-waste)
