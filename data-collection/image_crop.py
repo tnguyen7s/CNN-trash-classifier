@@ -111,10 +111,10 @@ def crop(src_img_folder, src_img_name, dest_img_folder, category_name, annotatio
     y1 = int(abs(y))
     y2 = int(abs(y) + abs(height))
 
-    if (x2>image_w):
-        x2 = image_w-1
-    if (y2>image_h):
-        y2 = image_h-1
+    # if (x2>image_w):
+    #     x2 = image_w-1
+    # if (y2>image_h):
+    #     y2 = image_h-1
 
     # crop
     try:            
