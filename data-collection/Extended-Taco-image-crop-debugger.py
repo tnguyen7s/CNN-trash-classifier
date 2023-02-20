@@ -2,8 +2,8 @@ import pandas as pd
 import json
 from image_crop import *
 
-def get_successful_cropped_annot_ids():
-    labels_file = './collected-datasets/Extended-Taco/labels.csv'
+def get_successful_cropped_annot_ids(labels_file):
+    # labels_file = './collected-datasets/Extended-Taco/labels.csv'
 
     # get file paths
     df = pd.read_csv(labels_file, header=None)
@@ -17,10 +17,10 @@ def get_successful_cropped_annot_ids():
 
     return annot_ids
 
-def get_failed_cropped_annotations_file():
-    annotation_files = ['./annotations/Extended_Taco_annotations_test.json', './annotations/Extended_Taco_annotations_train.json']
-    result_annotation_file = './annotations/Extended_Taco_annotations_failed.json'
-    success_ids = get_successful_cropped_annot_ids()
+def get_failed_cropped_annotations_file(annotation_files, result_annotation_file, labels_file):
+    # annotation_files = ['./annotations/Extended_Taco_annotations_test.json', './annotations/Extended_Taco_annotations_train.json']
+    # result_annotation_file = './annotations/Extended_Taco_annotations_failed.json'
+    success_ids = get_successful_cropped_annot_ids(labels_file)
 
     # get annotations that have not been cropped 
     unsuccess_annots = []
@@ -71,9 +71,10 @@ def try_to_crop():
     labels_filepath = './collected-datasets/Extended-Taco-failed-recropped/labels.csv'
     zoom = 1
     square = True
-    rotate_90_couter = True
+    rotate_90_couter = False
  
     # crop(src_img_folder, 'dumped/6WYHCrMXfj9cBuTxuhik2uZnCTjNcAHlK3LpcFB7.jpeg', dest_img_folder, 'metals_and_plastic', '1_2', [2650.43, 1634.55, 60.41, 48.06], zoom, square)
     crop_and_label_Taco(4, annotation_filepath, src_img_folder, dest_img_folder, labels_filepath, zoom, square, rotate_90_couter)
 
+# get_failed_cropped_annotations_file(['./annotations/Extended_Taco_annotations_failed.json'], './annotations/Extended_Taco_annotations_failed.json', './collected-datasets/Extended-Taco-failed-recropped/labels.csv')
 try_to_crop()

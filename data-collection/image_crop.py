@@ -130,7 +130,6 @@ def crop(src_img_folder, src_img_name, dest_img_folder, category_name, annotatio
         print("image shape: ", img.shape)
         print(str(y1)+":"+str(y2)+" "+str(x1)+":"+ str(x2))
         print(cropped_img)
-        raise e
         return -1
     
     return 0
