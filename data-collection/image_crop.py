@@ -13,6 +13,7 @@ import os
 import cv2
 import pandas as pd
 import warnings
+import numpy as np
 
 CATEGORIES = {
     1: 'metals_and_plastic',
@@ -34,7 +35,7 @@ def yolo_to_coco(x_center, y_center, w, h,  image_w, image_h):
     return [x1, y1, w, h]
 
 
-def crop(src_img_folder, src_img_name, dest_img_folder, category_name, annotation_id, bbox, zoom, square, yolo=False):
+def crop(src_img_folder, src_img_name, dest_img_folder, category_name, annotation_id, bbox, zoom, square, yolo=False, rotate_90_counter=False):
     """
     To crop and save cropped image
 
@@ -75,12 +76,13 @@ def crop(src_img_folder, src_img_name, dest_img_folder, category_name, annotatio
     """
     # read image to crop
     src_img_path = os.path.join(src_img_folder, src_img_name)
-    img = cv2.imread(src_img_path)
-    
-    # if image does not exist
-    if (img is None):
-        print('return -1')
+    if (os.path.exists(src_img_path)):
+        img = cv2.imread(src_img_path)
+    else:
         return -1
+
+    if rotate_90_counter:
+        img = cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE)
 
     # get image width and height
     img_dims = img.shape
@@ -111,10 +113,6 @@ def crop(src_img_folder, src_img_name, dest_img_folder, category_name, annotatio
     y1 = int(abs(y))
     y2 = int(abs(y) + abs(height))
 
-    # if (x2>image_w):
-    #     x2 = image_w-1
-    # if (y2>image_h):
-    #     y2 = image_h-1
 
     # crop
     try:            
@@ -132,11 +130,12 @@ def crop(src_img_folder, src_img_name, dest_img_folder, category_name, annotatio
         print("image shape: ", img.shape)
         print(str(y1)+":"+str(y2)+" "+str(x1)+":"+ str(x2))
         print(cropped_img)
+        raise e
         return -1
     
     return 0
 
-def crop_and_label_Taco(subset_num, annotation_filepath, src_img_folder, dest_img_folder, labels_filepath, zoom, square):
+def crop_and_label_Taco(subset_num, annotation_filepath, src_img_folder, dest_img_folder, labels_filepath, zoom, square, rotate_90_counter):
     """
     crop and label Taco images
     images goes to 
@@ -189,9 +188,6 @@ def crop_and_label_Taco(subset_num, annotation_filepath, src_img_folder, dest_im
         image_filename = image_filenames[image_id]
         category_name = CATEGORIES[category_id]
         
-            
-        
-        
         # crop image
         if (crop(src_img_folder, 
              image_filename, 
@@ -200,7 +196,9 @@ def crop_and_label_Taco(subset_num, annotation_filepath, src_img_folder, dest_im
              annotat_id, 
              bbox, 
              zoom, 
-             square
+             square,
+             False, 
+             rotate_90_counter
             ) == 0):
             # add label record
             labels_data['image_path'].append('/'.join([dest_img_folder, category_name, str(annotat_id)+".jpg"]))

@@ -63,19 +63,17 @@ def get_failed_cropped_annotations_file():
     with open(result_annotation_file, 'w') as f:
         json.dump(json_object, f) 
 
-# get_failed_cropped_annotations_file()
-annotation_filepath = './annotations/Extended_Taco_annotations_failed.json'
-src_img_folder = './Extended-Taco-dataset'
-dest_img_folder = './collected-datasets/Extended-Taco-failed-recropped'
-labels_filepath = './collected-datasets/Extended-Taco-failed-recropped/labels.csv'
-zoom = 1
-square = True
+def try_to_crop():
+    # get_failed_cropped_annotations_file()
+    annotation_filepath = './annotations/Extended_Taco_annotations_failed.json'
+    src_img_folder = './Extended-Taco-dataset'
+    dest_img_folder = './collected-datasets/Extended-Taco-failed-recropped'
+    labels_filepath = './collected-datasets/Extended-Taco-failed-recropped/labels.csv'
+    zoom = 1
+    square = True
+    rotate_90_couter = True
  
-crop_and_label_Taco(4, annotation_filepath, src_img_folder, dest_img_folder, labels_filepath, zoom, square)
-# crop(src_img_folder, 'dumped/6WYHCrMXfj9cBuTxuhik2uZnCTjNcAHlK3LpcFB7.jpeg', dest_img_folder, 'metals_and_plastic', '1_1', [1634.55, 2650.43, 60.41, 48.06], zoom, square)
-# crop(src_img_folder, 'batch_1/000006.jpg', dest_img_folder, 'metals_and_plastic', '1_4', [
-#         517.0,
-#         127.0,
-#         447.0,
-#         1322.0
-#       ], zoom, square=False)
+    # crop(src_img_folder, 'dumped/6WYHCrMXfj9cBuTxuhik2uZnCTjNcAHlK3LpcFB7.jpeg', dest_img_folder, 'metals_and_plastic', '1_2', [2650.43, 1634.55, 60.41, 48.06], zoom, square)
+    crop_and_label_Taco(4, annotation_filepath, src_img_folder, dest_img_folder, labels_filepath, zoom, square, rotate_90_couter)
+
+try_to_crop()
