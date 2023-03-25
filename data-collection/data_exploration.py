@@ -17,9 +17,20 @@ def imshow(image_np):
     plt.axis('off')
     plt.show()
 
-# image = Image.open('../data-collection/collected-datasets/train/unknown/1_346.jpg')
+# image = Image.open('./collected-datasets/All/paper/2_199.jpg')
 # np_image = np.array(image)
 # imshow(np_image)
+
+def imshow_actual_size(image_np):
+    width = image_np.shape[0]
+    height = image_np.shape[1]
+
+    dpi = 80
+    figsize = width / float(dpi), height / float(dpi)
+    plt.figure(figsize=figsize)
+    plt.imshow(image_np)
+    plt.axis('off')
+    plt.show()
 
 def imshow_pad(PIL_image, pad=50):
     """
@@ -30,7 +41,7 @@ def imshow_pad(PIL_image, pad=50):
     padded_img = pad_transform(PIL_image)
     padded_img.show()
     
-# image = Image.open('../data-collection/collected-datasets/train/glass/1_0.jpg')
+# image = Image.open('./collected-datasets/All/metals_and_plastic/2_248.jpg')
 # imshow_pad(image)
 
 def im_count_distribution(train_folder, test_folder, val_folder):
@@ -138,4 +149,4 @@ def im_size_statistics(csv_data_file):
     plt.title("Distribution of Image Size")
     plt.show()
 
-im_size_statistics('./images_height.csv')
+# im_size_statistics('./images_height.csv')

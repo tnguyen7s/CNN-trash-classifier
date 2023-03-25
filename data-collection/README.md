@@ -29,6 +29,15 @@ Notes:
 Notes:
 	
 	4811 trash instances
+	
+	
+### Train Test Split: 80-10-10
+1. data collected from different sources are saved in `collected-dataset` folder
+2. all data moved into a folder `collected-dataset/all`
+3. resize image to 224 and save them in `collected-dataset/all-224`
+image_size<224: add padding=0
+image_size>224: scale down the image
+4. images after being resized are split to train-test-val and save in `collected-dataset/train`, `collected-dataset/test`, ``collected-dataset/val` respectively
 
 
 
