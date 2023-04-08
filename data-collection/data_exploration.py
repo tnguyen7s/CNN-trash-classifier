@@ -91,7 +91,7 @@ def im_count_distribution(train_folder, test_folder, val_folder):
     print(test_dist, end='\n\n')
 
 
-DATASET_FOLDER = '../data-collection/collected-datasets'
+DATASET_FOLDER = './collected-datasets'
 TRAIN_FOLDER = DATASET_FOLDER + '/train'
 VAL_FOLDER = DATASET_FOLDER + '/val'
 TEST_FOLDER = DATASET_FOLDER + '/test'

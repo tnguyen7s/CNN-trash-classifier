@@ -3,7 +3,7 @@ import math
 import shutil
 import random
 
-DATASET_FOLDER = './collected-datasets/All_224'
+DATASET_FOLDER = './collected-datasets/All_Oversample_224'
 OUT_FOLDER = './collected-datasets'
 TRAIN_FOLDER = OUT_FOLDER + '/train'
 VAL_FOLDER = OUT_FOLDER + '/val'

@@ -36,5 +36,8 @@
 *.hdp
 *.wdp
 
+*.png
+*.gif
 
 venv/
+*.pyc

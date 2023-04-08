@@ -1,7 +1,6 @@
 from torchvision import transforms
 from PIL import Image
 import numpy as np
-from data_exploration import imshow_actual_size
 import os
 def resize_to_224(PIL_img):
     """
@@ -43,7 +42,7 @@ def resize_images(folder):
     """
     This function resizes images defined in `folder` and saves them in another folder
     """
-    parent_out_folder = folder + "_224"
+    parent_out_folder = folder + " 224"
     labels = os.listdir(folder)
     for label in labels:
         out_folder = parent_out_folder+"/"+label
@@ -60,4 +59,4 @@ def resize_images(folder):
             transformed_im.save(path)
  
 
-resize_images('./collected-datasets/All')
+resize_images('./collected-datasets/All_Oversample/')
