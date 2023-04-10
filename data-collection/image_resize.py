@@ -59,4 +59,4 @@ def resize_images(folder):
             transformed_im.save(path)
  
 
-resize_images('./collected-datasets/All_Oversample/')
+# resize_images('./collected-datasets/Deleted_Plastics_And_Metals/')
