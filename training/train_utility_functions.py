@@ -202,7 +202,7 @@ def train(model, criterion, train_loader, val_loader, epochs, model_name, device
       train_running_corrects += correct_preds
       train_running_loss += loss.item()*data.size(0)
       train_size += data.size(0)
-      print(f'Epoch %d: %.2f%% completes.'%(e, (i+1)*100.0/len(train_loader)))
+      #print(f'Epoch %d: %.2f%% completes.'%(e, (i+1)*100.0/len(train_loader)))
 
     else:
       model.epochs += 1
@@ -259,6 +259,7 @@ def train(model, criterion, train_loader, val_loader, epochs, model_name, device
     if (no_improved_epochs==max_epochs_stop):
         print(f"FINISH TRAINING, lowest val loss is {smallest_val_loss:.2f}")
         print(f"\t Best accuracy is {best_val_acc:.2f}")
+        return
 
   print(f"FINISH TRAINING, lowest val loss is {smallest_val_loss:.2f}")
   print(f"\t Best accuracy is {best_val_acc:.2f}") 
@@ -342,7 +343,7 @@ def pretrained_efficientnet_v2_s1(device, summarize=False):
   # add custom classifier
   custom_classifier = nn.Sequential(
     nn.Dropout(p=0.2, inplace=True),
-    nn.Linear(in_features=1280, out_features=10),
+    nn.Linear(in_features=1280, out_features=7),
     nn.Softmax(1)
   )
   efficientnet_v2_s.classifier = custom_classifier
