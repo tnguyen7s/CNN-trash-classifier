@@ -11,8 +11,8 @@ If so, please visit https://trash-classifier-webapp.herokuapp.com/
 
 ## Future Work
 1. Improve the model’s capability by:
-*Collect more data (I encourage you to support these two projects: https://openlittermap.com/about and http://tacodataset.org/ by uploading your trash images)
-*Deal with complexity of trash sorting: different kinds of glass can be recycled, but others are not; the same to plastics. Research to answer the question whether computer vision can deal with this complexity.
+* Collect more data (I encourage you to support these two projects: https://openlittermap.com/about and http://tacodataset.org/ by uploading your trash images)
+* Deal with complexity of trash sorting: different kinds of glass can be recycled, but others are not; the same to plastics. Research to answer the question whether computer vision can deal with this complexity.
 
 2. Create a low cost and effective machine/robot that can effectively scan through the trash and do the sorting for us by either grasping the trash and placing it to the correct bin or moving it to the correct bin in a belt conveyor 
 
