@@ -2,7 +2,7 @@
 This is a Deep Learning project for my CS independent study class. My objective is to learn about CNN, collect a trash dataset, and train a classifier using the trash dataset.
 
 ## Work and Result
-You can see my work and result via [the powerpoint](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Ftnguyen7s%2FCNN-trash-classifier%2Fmaster%2Fpp%2FTuyen_SEMO_SCR_April2023.pptx&wdOrigin=BROWSELINK) that I prepared for my presentation at Southeast Missouri State University - Student Research Conference, April 2023.
+You can see my work and result via [the powerpoint](https://view.officeapps.live.com/op/view.aspx?src=https%3A%2F%2Fraw.githubusercontent.com%2Ftnguyen7s%2FCNN-trash-classifier%2Fmaster%2Fpp%2FTuyen_SEMO_SCR_April2023.pptx&wdOrigin=BROWSELINK) and the presentation (https://www.youtube.com/watch?fbclid=IwAR1xvcsD9Z0FfbZeqbkEvP4cCLvanzNvhNufs4vjmsESTu52VwVgCIjYb2g&v=alJAc6tS6-w&feature=youtu.be) that I prepared for my presentation at Southeast Missouri State University - Student Research Conference, April 2023.
 
 ## A trash classifier webapp
 Wanna try with the trash classifier that I created :))
